@@ -34,7 +34,7 @@ public class InserisciRisultatoServlet extends HttpServlet {
             response.sendRedirect("arbitro.jsp?status=ok");
 
         } catch (SecurityException e) {
-            .printStackTrace();
+            e.printStackTrace();
             response.sendRedirect("login.jsp?error=unauthorized");
 
         } catch (Exception e) {
