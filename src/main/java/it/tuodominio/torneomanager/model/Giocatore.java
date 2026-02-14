@@ -6,13 +6,13 @@ public class Giocatore implements Serializable {
     private int idGiocatore;
     private String nome;
     private String cognome;
-    private String ruolo;
+    private String ruolo; // Es: "Portiere", "Attaccante"
     private int numeroMaglia;
-    private int idSquadra;
+    private int idSquadra; // Riferimento alla squadra di appartenenza
 
     public Giocatore() {}
 
-
+    // Getters e Setters
     public int getIdGiocatore() { return idGiocatore; }
     public void setIdGiocatore(int idGiocatore) { this.idGiocatore = idGiocatore; }
 

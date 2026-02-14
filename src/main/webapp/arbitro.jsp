@@ -16,22 +16,12 @@
     TorneoDAO tDao = new TorneoDAO();
     SquadraDAO sDao = new SquadraDAO();
 
-    List<Torneo> tornei = tDao.doRetrieveAll();
-    List<Partita> miePartite = new ArrayList<>();
-
-    // Cicliamo su tutti i tornei per trovare le partite di QUESTO arbitro
-    for(Torneo t : tornei) {
-        List<Partita> partiteTorneo = pDao.doRetrieveByTorneo(t.getIdTorneo());
-        for(Partita p : partiteTorneo) {
-            // NOTA: Ho tolto il controllo !p.isGiocata() così vedi anche quelle finite
-            // Controlla se getIdUtente() è corretto o se devi usare getId()
-            if(p.getIdArbitro() == utente.getIdUtente()) {
-                miePartite.add(p);
-            }
-        }
-    }
-
+    PartitaDAO pDaoArbitro = new PartitaDAO();
+    List<Partita> proposteInSospeso = pDaoArbitro.doRetrieveProposteArbitro(utente.getIdUtente());
     List<Squadra> tutteSquadre = sDao.doRetrieveAll();
+    List<Partita> candidatureInAttesa = pDaoArbitro.doRetrieveCandidatureInAttesa(utente.getIdUtente());
+    List<Partita> miePartite = pDaoArbitro.doRetrievePartiteConfermate(utente.getIdUtente());
+
 %>
 
 <!DOCTYPE html>
@@ -39,6 +29,75 @@
 <head>
     <meta charset="UTF-8">
     <title>Area Arbitro</title>
+    <div class="container mt-4">
+        <% if(proposteInSospeso != null && !proposteInSospeso.isEmpty()) { %>
+        <div class="card shadow-sm mb-4 border-warning">
+            <div class="card-header bg-warning text-dark fw-bold">
+                🔔 Hai <%= proposteInSospeso.size() %> nuove richieste di arbitraggio!
+            </div>
+            <ul class="list-group list-group-flush">
+                <% for(Partita pReq : proposteInSospeso) { %>
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
+                    <div>
+                        <strong>Partita ID: #<%= pReq.getIdPartita() %></strong><br>
+                        <small class="text-muted">Data: <%= pReq.getDataOra() %> | Luogo: <%= pReq.getLuogo() %></small>
+                    </div>
+                    <div>
+                        <a href="RispostaArbitroServlet?idPartita=<%= pReq.getIdPartita() %>&azione=accetta"
+                           class="btn btn-success btn-sm me-2">✅ Accetta</a>
+
+                        <a href="RispostaArbitroServlet?idPartita=<%= pReq.getIdPartita() %>&azione=rifiuta"
+                           class="btn btn-outline-danger btn-sm"
+                           onclick="return confirm('Sicuro di voler rifiutare questo incarico?');">❌ Rifiuta</a>
+                    </div>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+        <% } %>
+    </div>
+    <%
+        List<Partita> partiteLibere = pDaoArbitro.doRetrievePartiteLibere();
+    %>
+
+    <div class="card shadow-sm mb-4 border-info">
+        <div class="card-header bg-info text-white fw-bold">
+            🙋‍♂️ Partite in cerca di Arbitro
+        </div>
+        <ul class="list-group list-group-flush">
+            <% if(partiteLibere.isEmpty()) { %>
+            <li class="list-group-item text-muted">Non ci sono partite libere al momento.</li>
+            <% } else { %>
+            <% for(Partita pLibera : partiteLibere) { %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>Partita ID: #<%= pLibera.getIdPartita() %> (Torneo #<%= pLibera.getIdTorneo() %>)</strong><br>
+                    <small class="text-muted">Data: <%= pLibera.getDataOra() %> | Luogo: <%= pLibera.getLuogo() %></small>
+                </div>
+                <a href="CandidatiServlet?idPartita=<%= pLibera.getIdPartita() %>" class="btn btn-outline-primary btn-sm">✋ Candidati</a>
+            </li>
+            <% } %>
+            <% } %>
+        </ul>
+    </div>
+    <% if(candidatureInAttesa != null && !candidatureInAttesa.isEmpty()) { %>
+    <div class="card shadow-sm mb-4 border-secondary">
+        <div class="card-header bg-secondary text-white fw-bold">
+            ⏳ Le tue candidature in attesa di conferma
+        </div>
+        <ul class="list-group list-group-flush">
+            <% for(Partita pCand : candidatureInAttesa) { %>
+            <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
+                <div>
+                    <strong>Partita ID: #<%= pCand.getIdPartita() %></strong><br>
+                    <small class="text-muted">L'organizzatore sta valutando la tua richiesta.</small>
+                </div>
+                <span class="badge bg-warning text-dark">In Valutazione</span>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+    <% } %>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">

@@ -86,8 +86,38 @@ public class TorneoServiceImpl implements TorneoService {
     @Override
     public void assegnaArbitro(int idPartita, int idArbitro) throws Exception {
         PartitaDAO pDao = new PartitaDAO();
-        pDao.doAssegnaArbitro(idPartita, idArbitro);
-        System.out.println("LOG: Arbitro " + idArbitro + " assegnato alla partita " + idPartita);
+        pDao.doProponiArbitro(idPartita, idArbitro);
+        System.out.println("LOG: Proposta inviata all'arbitro " + idArbitro + " per la partita " + idPartita);
+    }
+
+    @Override
+    public void rispondiPropostaArbitro(int idPartita, boolean accetta, int idArbitro) throws Exception {
+        PartitaDAO pDao = new PartitaDAO();
+        if (accetta) {
+            // Se accetta, trasformiamo l'ID da negativo a positivo
+            pDao.doAssegnaArbitro(idPartita, idArbitro);
+            System.out.println("LOG: Arbitro " + idArbitro + " ha ACCETTATO la partita " + idPartita);
+        } else {
+            // Se rifiuta, rimettiamo a 0 (Non assegnato)
+            pDao.doAssegnaArbitro(idPartita, 0);
+            System.out.println("LOG: Arbitro " + idArbitro + " ha RIFIUTATO la partita " + idPartita);
+        }
+    }
+    @Override
+    public void candidatiPerPartita(int idPartita, int idArbitro) throws Exception {
+        PartitaDAO pDao = new PartitaDAO();
+        pDao.doCandidaturaArbitro(idPartita, idArbitro);
+        System.out.println("LOG: Arbitro " + idArbitro + " si è candidato per la partita " + idPartita);
+    }
+
+    @Override
+    public void gestisciCandidatura(int idPartita, boolean accetta, int idArbitro) throws Exception {
+        PartitaDAO pDao = new PartitaDAO();
+        if(accetta) {
+            pDao.doAssegnaArbitro(idPartita, idArbitro); // Confermato!
+        } else {
+            pDao.doAssegnaArbitro(idPartita, 0); // Rifiutato, la partita torna libera
+        }
     }
 
     @Override

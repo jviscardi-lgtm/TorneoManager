@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class Squadra implements Serializable {
     private int idSquadra;
     private String nomeSquadra;
-    private String logoPath;
-    private int idPresidente;
+    private String logoPath; // Il percorso del file immagine o un URL
+    private int idPresidente; // Chiave esterna verso Utente
 
     public Squadra() {}
 
-
+    // Getters e Setters
     public int getIdSquadra() { return idSquadra; }
     public void setIdSquadra(int idSquadra) { this.idSquadra = idSquadra; }
 

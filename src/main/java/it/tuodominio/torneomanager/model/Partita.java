@@ -10,14 +10,14 @@ public class Partita implements Serializable {
     private int idTorneo;
     private int idSquadraCasa;
     private int idSquadraOspite;
-    private int idArbitro;
+    private int idArbitro;       // 0 se non ancora assegnato
     private int golCasa;
     private int golOspite;
-    private boolean giocata;
-
+    private boolean giocata;     // false = da giocare, true = finita
+    private String statoArbitro = "LIBERA";
     public Partita() {}
 
-
+    // Getters e Setters
     public int getIdPartita() { return idPartita; }
     public void setIdPartita(int idPartita) { this.idPartita = idPartita; }
 
@@ -47,4 +47,6 @@ public class Partita implements Serializable {
 
     public boolean isGiocata() { return giocata; }
     public void setGiocata(boolean giocata) { this.giocata = giocata; }
+    public String getStatoArbitro() { return statoArbitro; }
+    public void setStatoArbitro(String statoArbitro) { this.statoArbitro = statoArbitro; }
 }

@@ -10,11 +10,11 @@ public class Torneo implements Serializable {
     private Date dataFine;
     private String descrizione;
     private String luogo;
-    private int idOrganizzatore;
+    private int idOrganizzatore; // Chiave esterna
     private boolean chiuso;
     public Torneo() {}
 
-
+    // Getters e Setters
     public int getIdTorneo() { return idTorneo; }
     public void setIdTorneo(int idTorneo) { this.idTorneo = idTorneo; }
 

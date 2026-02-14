@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SquadraDAO {
 
-
+    // 1. SALVA UNA NUOVA SQUADRA
     public synchronized void doSave(Squadra s) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -35,7 +35,7 @@ public class SquadraDAO {
         }
     }
 
-
+    // 2. RECUPERA TUTTE LE SQUADRE (Per l'Admin o per le classifiche)
     public synchronized List<Squadra> doRetrieveAll() {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -68,7 +68,8 @@ public class SquadraDAO {
         return lista;
     }
 
-
+    // 3. RECUPERA LA SQUADRA DI UN PRESIDENTE SPECIFICO
+    // Fondamentale per la Dashboard del Presidente
     public synchronized Squadra doRetrieveByPresidente(int idPresidente) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -99,9 +100,9 @@ public class SquadraDAO {
                 e.printStackTrace();
             }
         }
-        return s;
+        return s; // Ritorna null se il presidente non ha ancora creato una squadra
     }
-
+    // Recupera tutte le squadre iscritte a un determinato torneo
     public synchronized List<Squadra> doRetrieveByTorneo(int idTorneo) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -109,7 +110,7 @@ public class SquadraDAO {
 
         try {
             conn = DriverManagerConnectionPool.getConnection();
-
+            // JOIN: Uniamo squadra e iscrizione
             String sql = "SELECT s.* FROM squadra s " +
                     "JOIN iscrizione i ON s.id_squadra = i.id_squadra " +
                     "WHERE i.id_torneo = ?";
@@ -138,4 +139,5 @@ public class SquadraDAO {
         }
         return iscritte;
     }
+
 }

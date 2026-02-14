@@ -11,7 +11,9 @@ public interface TorneoService {
 
     void assegnaArbitro(int idPartita, int idArbitro) throws Exception;
 
-
+    void rispondiPropostaArbitro(int idPartita, boolean accetta, int idArbitro) throws Exception;
+    void candidatiPerPartita(int idPartita, int idArbitro) throws Exception;
+    void gestisciCandidatura(int idPartita, boolean accetta, int idArbitro) throws Exception;
     void inserisciRisultato(int idPartita, int golCasa, int golOspite) throws Exception;
 
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class TorneoDAO {
 
-
+    // Recupera TUTTI i tornei (per mostrarli in bacheca)
     public synchronized List<Torneo> doRetrieveAll() {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -42,7 +42,7 @@ public class TorneoDAO {
         return lista;
     }
 
-
+    // Salva un nuovo torneo
     public synchronized void doSave(Torneo t) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -71,6 +71,7 @@ public class TorneoDAO {
             }
         }
     }
+    // Iscrivi una squadra a un torneo
     public synchronized void doIscriviSquadra(int idTorneo, int idSquadra) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -94,6 +95,7 @@ public class TorneoDAO {
         }
     }
 
+    // Controlla se una squadra è già iscritta
     public synchronized boolean isIscritto(int idTorneo, int idSquadra) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -120,6 +122,7 @@ public class TorneoDAO {
         }
         return iscritto;
     }
+    // 1. Metodo per cambiare SOLO lo stato (Chiudi/Apri)
     public synchronized void doUpdateStato(int idTorneo, boolean chiuso) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -143,6 +146,7 @@ public class TorneoDAO {
         }
     }
 
+    // 2. Metodo per modificare i dati del torneo
     public synchronized void doUpdate(Torneo t) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -156,7 +160,7 @@ public class TorneoDAO {
             ps.setString(3, t.getDescrizione());
             ps.setDate(4, t.getDataInizio());
             ps.setDate(5, t.getDataFine());
-            ps.setInt(6, t.getIdTorneo());
+            ps.setInt(6, t.getIdTorneo()); // WHERE id_torneo = ...
 
             ps.executeUpdate();
             conn.commit();
@@ -172,6 +176,7 @@ public class TorneoDAO {
         }
     }
 
+    // 3. Ci serve anche un metodo per recuperare un singolo torneo per ID (se non c'è già)
     public synchronized Torneo doRetrieveByKey(int idTorneo) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -203,5 +208,50 @@ public class TorneoDAO {
             }
         }
         return t;
+    }
+
+    public synchronized void doDelete(int idTorneo) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = DriverManagerConnectionPool.getConnection();
+            String sql = "DELETE FROM torneo WHERE id_torneo = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, idTorneo);
+            ps.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                DriverManagerConnectionPool.releaseConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public synchronized void doAnnullaIscrizione(int idTorneo, int idSquadra) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = DriverManagerConnectionPool.getConnection();
+            String sql = "DELETE FROM iscrizione WHERE id_torneo = ? AND id_squadra = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, idTorneo);
+            ps.setInt(2, idSquadra);
+            ps.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                DriverManagerConnectionPool.releaseConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

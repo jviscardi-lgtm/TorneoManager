@@ -6,7 +6,7 @@ import java.util.List;
 
 public class GiocatoreDAO {
 
-
+    // Aggiungi un giocatore alla rosa
     public synchronized void doSave(Giocatore g) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -37,7 +37,7 @@ public class GiocatoreDAO {
         }
     }
 
-
+    // Rimuovi un giocatore (es. mercato o errore)
     public synchronized void doDelete(int idGiocatore) {
         Connection conn = null;
         PreparedStatement ps = null;
@@ -63,7 +63,7 @@ public class GiocatoreDAO {
         }
     }
 
-
+    // Metodo fondamentale per ricostruire la relazione "Squadra contiene Giocatori"
     public synchronized List<Giocatore> doRetrieveBySquadra(int idSquadra) {
         Connection conn = null;
         PreparedStatement ps = null;

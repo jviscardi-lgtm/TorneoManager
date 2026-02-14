@@ -206,35 +206,69 @@
               </td>
               <td class="fw-bold"><%= nomeOspite %></td>
 
-            <td>
-              <% if(utente.getTipo().equalsIgnoreCase("ORGANIZZATORE")) { %>
-              <form action="AssegnaArbitroServlet" method="post" class="d-flex">
-                <input type="hidden" name="idPartita" value="<%= p.getIdPartita() %>">
-                <input type="hidden" name="idTorneo" value="<%= torneo.getIdTorneo() %>">
+              <td>
+                <% if(utente != null && utente.getTipo().equalsIgnoreCase("ORGANIZZATORE")) { %>
 
-                <select name="idArbitro" class="form-select form-select-sm" style="width: 150px;">
-                  <option value="0">-- Seleziona --</option>
-                  <% for(Utente a : listaArbitri) {
-                    // Se l'arbitro è già assegnato, lo selezioniamo di default
-                    String selected = (p.getIdArbitro() == a.getIdUtente()) ? "selected" : "";
-                  %>
-                  <option value="<%= a.getIdUtente() %>" <%= selected %>>
-                    <%= a.getCognome() %>
-                  </option>
-                  <% } %>
-                </select>
-                <button type="submit" class="btn btn-sm btn-outline-dark ms-1">💾</button>
-              </form>
-              <% } else { %>
-              <%
-                String nomeArbitro = "Non assegnato";
-                for(Utente a : listaArbitri) {
-                  if(a.getIdUtente() == p.getIdArbitro()) nomeArbitro = a.getCognome();
-                }
-              %>
-              <span class="badge bg-info text-dark"><%= nomeArbitro %></span>
-              <% } %>
-            </td>
+                <% if(p.getStatoArbitro().equals("CANDIDATO")) {
+                  String nomeCand = "Arbitro";
+                  for(Utente a : listaArbitri) if(a.getIdUtente() == p.getIdArbitro()) nomeCand = a.getCognome();
+                %>
+                <div class="border border-info p-1 rounded bg-light">
+                  <span class="badge bg-info text-dark d-block mb-1">🙋 Candidato: <%= nomeCand %></span>
+                  <a href="GestisciCandidaturaServlet?idPartita=<%= p.getIdPartita() %>&idArbitro=<%= p.getIdArbitro() %>&azione=accetta&idTorneo=<%= p.getIdTorneo() %>" class="btn btn-success btn-sm w-100 mb-1">✅ Accetta</a>
+                  <a href="GestisciCandidaturaServlet?idPartita=<%= p.getIdPartita() %>&idArbitro=<%= p.getIdArbitro() %>&azione=rifiuta&idTorneo=<%= p.getIdTorneo() %>" class="btn btn-danger btn-sm w-100">❌ Rifiuta</a>
+                </div>
+                <% } else { %>
+                <form action="AssegnaArbitroServlet" method="post" class="d-flex align-items-center">
+                  <input type="hidden" name="idPartita" value="<%= p.getIdPartita() %>">
+                  <input type="hidden" name="idTorneo" value="<%= torneo.getIdTorneo() %>">
+
+                  <select name="idArbitro" class="form-select form-select-sm" style="width: 150px;">
+                    <option value="0">-- Seleziona --</option>
+                    <% for(Utente a : listaArbitri) {
+                      String selected = (p.getIdArbitro() == a.getIdUtente()) ? "selected" : "";
+                    %>
+                    <option value="<%= a.getIdUtente() %>" <%= selected %>>
+                      <%= a.getCognome() %>
+                    </option>
+                    <% } %>
+                  </select>
+                  <button type="submit" class="btn btn-sm btn-outline-dark ms-1">💾</button>
+                </form>
+
+                <% if(p.getStatoArbitro().equals("PROPOSTA")) { %>
+                <span class="badge bg-warning text-dark mt-1 d-block" style="width: fit-content;">⏳ In Attesa</span>
+                <% } else if(p.getStatoArbitro().equals("CONFERMATO")) { %>
+                <span class="badge bg-success mt-1 d-block" style="width: fit-content;">✅ Confermato</span>
+                <% } %>
+                <% } %>
+
+                <% } else { %>
+                <%
+                  String nomeArbitro = "Non assegnato";
+                  String statoBadge = "bg-secondary";
+
+                  if (!p.getStatoArbitro().equals("LIBERA")) {
+                    for(Utente a : listaArbitri) {
+                      if(p.getIdArbitro() == a.getIdUtente()) {
+                        nomeArbitro = a.getCognome();
+                        if(p.getStatoArbitro().equals("PROPOSTA")) {
+                          nomeArbitro += " (In Attesa)";
+                          statoBadge = "bg-warning text-dark";
+                        } else if(p.getStatoArbitro().equals("CANDIDATO")) {
+                          nomeArbitro = "In Valutazione";
+                          statoBadge = "bg-warning text-dark";
+                        } else {
+                          statoBadge = "bg-info text-dark";
+                        }
+                      }
+                    }
+                  }
+                %>
+                <span class="badge <%= statoBadge %>"><%= nomeArbitro %></span>
+                <% } %>
+              </td>
+
             </tr>
             <% } %>
             </tbody>
