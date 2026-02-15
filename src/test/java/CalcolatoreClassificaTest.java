@@ -4,7 +4,7 @@ import it.tuodominio.torneomanager.model.CalcolatoreClassifica;
 
 class CalcolatoreClassificaTest {
 
-    // Qui traduciamo la riga della tabella TCS: TC_U_01.1
+    
     @Test
     void testCalcoloTorneoInesistente() {
         // 1. Input (Dalla tabella TCS)
