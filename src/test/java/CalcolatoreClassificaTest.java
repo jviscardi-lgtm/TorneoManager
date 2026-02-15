@@ -11,7 +11,7 @@ class CalcolatoreClassificaTest {
         int idTorneo = -1;
 
         // 2. Esecuzione
-        // Nota: Assicurati che il tuo metodo gestisca l'errore o ritorni lista vuota
+      
         var risultato = CalcolatoreClassifica.calcola(idTorneo);
 
         // 3. Oracolo (Dalla tabella TCS)
