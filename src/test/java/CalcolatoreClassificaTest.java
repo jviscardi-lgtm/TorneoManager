@@ -45,5 +45,9 @@ class CalcolatoreClassificaTest {
 
         // Verifica extra: la prima squadra in classifica non può avere punti negativi
         assertTrue(risultato.get(0).getPunti() >= 0, "I punti della prima squadra dovrebbero essere >= 0");
+            //Restituisce lista ordinata
+            if (risultato.size() >= 2) {
+            assertTrue(risultato.get(0).getPunti() >= risultato.get(1).getPunti(), 
+                       "La classifica deve essere ordinata per punti in ordine decrescente");
     }
 }
