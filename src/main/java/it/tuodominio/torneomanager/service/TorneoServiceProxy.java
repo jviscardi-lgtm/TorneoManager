@@ -82,8 +82,6 @@ public class TorneoServiceProxy implements TorneoService {
         // Il Proxy controlla che chi fa l'azione sia effettivamente un Arbitro
         if (utente != null && utente.getTipo().equalsIgnoreCase("ARBITRO")) {
 
-            // (Opzionale ma consigliato per massima sicurezza):
-            // Controlla anche che l'arbitro stia rispondendo per se stesso e non per un altro!
             if(utente.getIdUtente() == idArbitro) {
                 realService.rispondiPropostaArbitro(idPartita, accetta, idArbitro);
             } else {
