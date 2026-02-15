@@ -9,7 +9,7 @@ class PartitaDAOTest {
     void testAggiornamentoRisultato() {
         PartitaDAO dao = new PartitaDAO();
 
-        // CAMBIA QUESTO ID con uno vero nel tuo DB!
+      
         int idPartitaReale = 1;
         int golCasa = 5;
         int golOspite = 5;
