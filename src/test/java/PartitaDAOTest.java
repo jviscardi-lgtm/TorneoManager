@@ -17,8 +17,6 @@ class PartitaDAOTest {
         // Eseguiamo l'update
         assertDoesNotThrow(() -> dao.doUpdateRisultato(idPartitaReale, golCasa, golOspite));
 
-        // NOTA: Se volessi essere preciso, qui dovresti fare una dao.doRetrieveByKey(idPartitaReale)
-        // e controllare che i gol siano diventati davvero 5-5.
     }
 
     // TC_U_04.2: ID Partita Inesistente
