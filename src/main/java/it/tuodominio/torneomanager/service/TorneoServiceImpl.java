@@ -22,7 +22,6 @@ public class TorneoServiceImpl implements TorneoService {
 
 
         if (squadre.size() < 2) {
-            // Nel Service lanciamo un'eccezione, non facciamo redirect!
             throw new Exception("SQUADRE_INSUFFICIENTI");
         }
 
