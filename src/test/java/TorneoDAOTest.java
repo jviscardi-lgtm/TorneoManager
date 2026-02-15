@@ -23,7 +23,7 @@ class TorneoDAOTest {
         TorneoDAO dao = new TorneoDAO();
         Torneo t = new Torneo();
 
-        t.setNome("JUNIT_TEST_TORNEO");
+        t.setNome("Test");
         t.setLuogo("Stadio Virtuale");
         t.setDescrizione("Torneo di prova automatico");
         t.setDataInizio(Date.valueOf("2025-01-01"));
