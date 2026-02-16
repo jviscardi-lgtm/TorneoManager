@@ -7,7 +7,7 @@ class UtenteDAOTest {
     void testLoginCorretto() {
         UtenteDAO dao = new UtenteDAO();
 
-        String emailEsistente = "arbitro@arbitro.it";
+        String emailEsistente = "arbitro@fischietto.it";
         String passwordCorretta = "arbitro";
 
         Utente u = dao.doRetrieveByEmailPassword(emailEsistente, passwordCorretta);
