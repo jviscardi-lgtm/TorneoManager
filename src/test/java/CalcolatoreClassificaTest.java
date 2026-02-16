@@ -21,9 +21,6 @@ class CalcolatoreClassificaTest {
     }
         @Test
     void testCalcoloTorneoSenzaPartite() {
-        // Copre la combinazione: A1 (ID Valido) + B1 (Nessuna partita giocata)
-
-        // Sostituisci '99' con l'ID di un torneo reale nel tuo DB che non ha partite (o creane uno al volo dal sito)
         int idTorneo = 99; 
 
         var risultato = CalcolatoreClassifica.calcola(idTorneo);
